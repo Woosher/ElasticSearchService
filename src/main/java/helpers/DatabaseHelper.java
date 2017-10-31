@@ -97,9 +97,11 @@ public class DatabaseHelper {
 
     }
 
-    public String setData(String index, String type, JSONObject jsonContent) throws Exception {
-        IndexResponse response = client.prepareIndex(index, type)
-                .setSource(jsonContent.toString(), XContentType.JSON).execute().actionGet();
+    public String setData(JSONObject jsonContent) {
+        String type = jsonContent.getString("type");
+        JSONObject body = jsonContent.getJSONObject("body");
+        IndexResponse response = client.prepareIndex(INDEX, type)
+                .setSource(body.toString(), XContentType.JSON).execute().actionGet();
         return response.toString();
     }
 
