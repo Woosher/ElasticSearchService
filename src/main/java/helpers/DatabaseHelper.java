@@ -27,7 +27,7 @@ public class DatabaseHelper {
 
     private TransportClient client;
     private static final String INDEX = "items";
-    private static final String FIELD_DESCRIPTION = "description";
+    private static final String FIELD_DESCRIPTION = "short_description";
     private static final String FIELD_BRAND = "brand";
     private static final String FIELD_MODEL= "model";
 
@@ -99,9 +99,9 @@ public class DatabaseHelper {
 
     public String setData(JSONObject jsonContent) {
         String type = jsonContent.getString("type");
-        JSONObject body = jsonContent.getJSONObject("body");
+        jsonContent.remove("type");
         IndexResponse response = client.prepareIndex(INDEX, type)
-                .setSource(body.toString(), XContentType.JSON).execute().actionGet();
+                .setSource(jsonContent.toString(), XContentType.JSON).execute().actionGet();
         return response.toString();
     }
 
