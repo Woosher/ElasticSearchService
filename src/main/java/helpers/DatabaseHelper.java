@@ -26,10 +26,10 @@ import static org.elasticsearch.index.query.QueryBuilders.matchAllQuery;
 public class DatabaseHelper {
 
     private TransportClient client;
-    private static final String INDEX = "items";
-    private static final String FIELD_DESCRIPTION = "short_description";
-    private static final String FIELD_BRAND = "brand";
-    private static final String FIELD_MODEL= "model";
+    private static final String INDEX = "shakespeare";
+    private static final String FIELD_DESCRIPTION = "line_number";
+    private static final String FIELD_BRAND = "speaker";
+    private static final String FIELD_MODEL= "text_entry";
 
     public DatabaseHelper() {
         try {
@@ -53,7 +53,7 @@ public class DatabaseHelper {
                     builder.setTypes(type);
             }
             if(query != null){
-                builder.setFrom(0).setSize(60);
+                builder.setFrom(0).setSize(500);
                 QueryStringQueryBuilder queryBuilder = new QueryStringQueryBuilder("*" + query +"*")
                         .field(FIELD_DESCRIPTION)
                         .field(FIELD_MODEL)
@@ -73,6 +73,7 @@ public class DatabaseHelper {
                 jsonArray.put(jsonObject);
             }
             responseObject.put("search_results", jsonArray);
+            responseObject.put("hits", jsonArray.length());
             retVal = responseObject.toString();
         } catch (Exception e) {
             e.printStackTrace();
